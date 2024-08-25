@@ -14,17 +14,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Endpoint to create a new user
-    @PostMapping("/")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return ResponseEntity.ok(createdUser);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User user) {
+        try {
+            User updatedUser = userService.updateUser(id, user);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build(); // Returns a 404 Not Found status
+        }
     }
 
-    // Endpoint to get all users
-    @GetMapping("/")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok().build(); // Successful deletion
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build(); // User not found
+        }
     }
 }
