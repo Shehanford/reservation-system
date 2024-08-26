@@ -1,3 +1,26 @@
+// Existing functionality: Managing Users
+
+// Function to add a user to the list dynamically
+function addUserToList(user) {
+    const userList = document.getElementById('userList');
+    const li = document.createElement('li');
+    li.textContent = `${user.name} - ${user.email} - ${user.role}`;
+    userList.appendChild(li);
+}
+
+// Load users when the page loads
+function loadUsers() {
+    fetch('/users/')
+        .then(response => response.json())
+        .then(users => {
+            const userList = document.getElementById('userList');
+            users.forEach(user => {
+                addUserToList(user);
+            });
+        });
+}
+
+// Event listener for adding a new user
 document.getElementById('addUserForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const user = {
@@ -24,23 +47,39 @@ document.getElementById('addUserForm').addEventListener('submit', function(event
     });
 });
 
-function addUserToList(user) {
-    const userList = document.getElementById('userList');
-    const li = document.createElement('li');
-    li.textContent = `${user.name} - ${user.email} - ${user.role}`;
-    userList.appendChild(li);
+// New functionality: Managing Restaurants
+
+// Function to add a restaurant to the list dynamically
+function addRestaurantToList(restaurant) {
+    const restaurantList = document.getElementById('restaurantList');
+    const div = document.createElement('div');
+    div.innerHTML = `
+        <h2>${restaurant.name}</h2>
+        <p>${restaurant.address}</p>
+        <p>${restaurant.description}</p>
+        <p>Facilities: ${restaurant.facilities}</p>
+    `;
+    restaurantList.appendChild(div);
 }
 
-function loadUsers() {
-    fetch('/users/')
-    .then(response => response.json())
-    .then(users => {
-        const userList = document.getElementById('userList');
-        users.forEach(user => {
-            addUserToList(user);
+// Load restaurants when the page loads
+function loadRestaurants() {
+    fetch('/restaurants/')
+        .then(response => response.json())
+        .then(restaurants => {
+            const restaurantList = document.getElementById('restaurantList');
+            restaurants.forEach(restaurant => {
+                addRestaurantToList(restaurant);
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Failed to load restaurants'); // User feedback
         });
-    });
 }
 
-// Load users when the page loads
-window.onload = loadUsers;
+// Initialize both users and restaurants loading when the page loads
+window.onload = function() {
+    loadUsers();       // Load users on user management page
+    loadRestaurants(); // Load restaurants on restaurant overview page
+};
