@@ -83,3 +83,65 @@ window.onload = function() {
     loadUsers();       // Load users on user management page
     loadRestaurants(); // Load restaurants on restaurant overview page
 };
+// Function to dynamically add a reservation to the page
+function addReservationToList(reservation) {
+    const reservationList = document.getElementById('reservationList');
+    const div = document.createElement('div');
+    div.innerHTML = `
+        <h3>Reservation for ${reservation.customerName}</h3>
+        <p>Email: ${reservation.customerEmail}</p>
+        <p>Party Size: ${reservation.partySize}</p>
+        <p>Time: ${new Date(reservation.reservationTime).toLocaleString()}</p>
+        <p>Special Requests: ${reservation.specialRequests}</p>
+    `;
+    reservationList.appendChild(div);
+}
+
+// Function to load reservations from the server and display them
+function loadReservations() {
+    fetch('/reservations/')
+        .then(response => response.json())
+        .then(reservations => {
+            reservations.forEach(reservation => {
+                addReservationToList(reservation);
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Failed to load reservations'); // User feedback on errors
+        });
+}
+
+// Event listener for handling reservation form submissions
+document.getElementById('reservationForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const reservation = {
+        customerName: document.getElementById('customerName').value,
+        customerEmail: document.getElementById('customerEmail').value,
+        partySize: parseInt(document.getElementById('partySize').value),
+        reservationTime: document.getElementById('reservationTime').value,
+        specialRequests: document.getElementById('specialRequests').value
+    };
+    
+    fetch('/reservations/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reservation)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        addReservationToList(data); // Add the new reservation to the list
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('Failed to make reservation'); // User feedback on errors
+    });
+});
+
+// Initialize the reservation loading on page load
+window.onload = function() {
+    loadReservations(); // Load existing reservations when the page loads
+};
