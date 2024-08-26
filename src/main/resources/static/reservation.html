@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Reservation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Make a Reservation</h1>
+    <form id="reservationForm">
+        <input type="text" id="customerName" placeholder="Your Name" required>
+        <input type="email" id="customerEmail" placeholder="Your Email" required>
+        <input type="number" id="partySize" placeholder="Party Size" required>
+        <input type="datetime-local" id="reservationTime" required>
+        <textarea id="specialRequests" placeholder="Special Requests"></textarea>
+        <button type="submit">Reserve</button>
+    </form>
+    <div id="reservationList"></div>
+    <script src="app.js"></script>
+</body>
+</html>
