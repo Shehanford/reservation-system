@@ -9,9 +9,9 @@ public class User {
     private String id;
     private String name;
     private String email;
-    private String role; // Ensure this field is correctly named
+    private String role; // User roles like ADMIN, STAFF, CUSTOMER
 
-    // Constructor
+    // Default Constructor
     public User() {}
 
     // Getters and Setters
