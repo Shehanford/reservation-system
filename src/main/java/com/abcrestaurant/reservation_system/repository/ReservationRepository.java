@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReservationRepository extends MongoRepository<Reservation, String> {
-    // Additional query methods can be defined here
+    // Additional query methods can be defined here, for example:
+    // List<Reservation> findByUserId(String userId);
 }
